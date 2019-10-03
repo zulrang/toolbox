@@ -24,5 +24,16 @@ set -euf -o pipefail
 #   None
 #---------------------------------#
 err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]:" "$@" >&2
 }
+
+die() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]:" "$@" >&2
+  exit 1
+}
+
+main() {
+  true
+}
+
+main "$@"
