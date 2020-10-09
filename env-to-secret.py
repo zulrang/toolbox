@@ -2,7 +2,7 @@
 """
 Converts an .env file to a Kubernetes Secret .yml format
 
-Usage: env-to-secret.py <secret name> [namespace]
+Usage: env-to-secret.py <secret name> [namespace] < <input file> | kubectl apply -f -
 
 """
 import sys
@@ -12,8 +12,13 @@ from yaml import dump
 
 def get_args():
     if not len(sys.argv) == 2 and not len(sys.argv) == 3:
-        return None
-    return sys.argv[1:]
+        return False
+    args = sys.argv[1:]
+    for arg in args:
+        # check for invalid characters
+        if arg.encode('utf-8').translate(None, b"abcdefghijklmnopqrstuvwxyz0123456789.-"):
+            sys.stderr.write("Invalid characters")
+            return False
 
 def sanitize_value(val):
     if val.startswith('"') and val.endswith('"'):
